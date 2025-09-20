@@ -138,14 +138,14 @@ const MovieSearch = (props) => {
     <div className="relative w-full max-w-lg">
       <Input
         type="text"
-        placeholder="Enter keyword"
+        placeholder="Buscar..."
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         className="w-full pr-32"
       />
       <div className="absolute right-0 top-0.5 md:right-px md:top-px">
         <Button small onClick={goToSearch}>
-          Search
+          Buscar
         </Button>
       </div>
     </div>

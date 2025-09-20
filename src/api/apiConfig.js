@@ -1,6 +1,6 @@
 const apiConfig = {
-  baseURL: "https://api.themoviedb.org/3/",
-  apiKey: "a5af826bc512272c8ee6bcc81eeccdfb",
+  baseURL: import.meta.env.VITE_URL,
+  apiKey: import.meta.env.VITE_TOKEN,
   originalImage: (imgPath) => `https://image.tmdb.org/t/p/original/${imgPath}`,
   w500Image: (imgPath) => `https://image.tmdb.org/t/p/w500/${imgPath}`
 }

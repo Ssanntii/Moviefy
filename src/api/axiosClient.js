@@ -7,6 +7,7 @@ const axiosClient = axios.create({
     baseURL: apiConfig.baseURL,
     headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${apiConfig.apiKey}`
     },
     paramsSerializer: (params) =>
         queryString.stringify({...params, api_key: apiConfig.apiKey })

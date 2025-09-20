@@ -34,6 +34,14 @@ const Footer = () => {
             >
               Home
             </Link>
+            <Link to = {`/${Config.HOME_PAGE}/movies`}
+              className="text-white hover:opacity-80 transition-opacity">
+              Movies
+            </Link>
+            <Link to = {`/${Config.HOME_PAGE}/tv`}
+              className="text-white hover:opacity-80 transition-opacity">
+              TV Shows
+            </Link>
           </div>
         </div>
       </div>
