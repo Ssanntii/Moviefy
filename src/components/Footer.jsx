@@ -1,10 +1,9 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import bg from "./../../assets/footer-bg.jpg";
-import logo from "./../../assets/logo.png";
+import bg from "../assets/footer-bg.jpg";
+import logo from "../assets/logo.png";
 
-import * as Config from "./../../constants/Config";
+import * as Config from "../constants/Config";
 
 const Footer = () => {
   return (
@@ -26,8 +25,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Menu Grid */}
-        <div className="grid grid-cols-3 gap-8 md:grid-cols-2 sm:grid-cols-1">
+        {/* Menu Grid - Mobile First */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col items-start mt-4 text-2xl font-semibold space-y-4">
             <Link 
               to={`/${Config.HOME_PAGE}`}
@@ -35,77 +34,11 @@ const Footer = () => {
             >
               Home
             </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Contact us
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Term of service
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              About us
-            </Link>
-          </div>
-          
-          <div className="flex flex-col items-start mt-4 text-2xl font-semibold space-y-4">
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Live
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              FAQ
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Premium
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Privacy policy
-            </Link>
-          </div>
-          
-          <div className="flex flex-col items-start mt-4 text-2xl font-semibold space-y-4">
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              You must watch
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Recent release
-            </Link>
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white hover:opacity-80 transition-opacity"
-            >
-              Top IMDB
-            </Link>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Footer;

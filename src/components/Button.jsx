@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 const Button = ({ children, className = "", onClick, small = false, ...props }) => {
@@ -36,7 +35,7 @@ const Button = ({ children, className = "", onClick, small = false, ...props }) 
 export const OutlineButton = ({ children, className = "", onClick, small = false, ...props }) => {
   const baseClasses = `
     cursor-pointer 
-    border-3 border-white 
+    border-2 border-white 
     bg-transparent text-white 
     rounded-lg 
     px-7 py-2 text-2xl font-semibold

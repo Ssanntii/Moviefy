@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
-import MovieCard from "./../movie-card/MovieCard";
-import tmdbApi, { category, movieType, tvType } from "../../api/tmdbApi";
-import Button, { OutlineButton } from "../button/Button";
-import Input from "../input/Input";
-import * as Config from "./../../constants/Config";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import MovieCard from "./MovieCard";
+import tmdbApi, { category, movieType, tvType } from "../api/tmdbApi";
+import Button, { OutlineButton } from "./Button";
+import Input from "./Input";
+import * as Config from "../constants/Config";
 
 const MovieGrid = (props) => {
   const [items, setItems] = useState([]);
@@ -14,9 +14,50 @@ const MovieGrid = (props) => {
 
   useEffect(() => {
     const getList = async () => {
+      try {
+        let response = null;
+        if (keyword === undefined) {
+          const params = {};
+          switch (props.category) {
+            case category.movie:
+              response = await tmdbApi.getMoviesList(movieType.upcoming, {
+                params,
+              });
+              break;
+            default:
+              response = await tmdbApi.getTvList(tvType.popular, { params });
+          }
+        } else {
+          const params = {
+            query: keyword,
+          };
+          response = await tmdbApi.search(props.category, { params });
+        }
+        
+        if (response && response.results) {
+          setItems(response.results);
+          setTotalPage(response.total_pages || 0);
+        } else {
+          console.error('API response is invalid:', response);
+          setItems([]);
+          setTotalPage(0);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setItems([]);
+        setTotalPage(0);
+      }
+    };
+    getList();
+  }, [keyword, props.category]);
+
+  const loadMore = async () => {
+    try {
       let response = null;
       if (keyword === undefined) {
-        const params = {};
+        const params = {
+          page: page + 1,
+        };
         switch (props.category) {
           case category.movie:
             response = await tmdbApi.getMoviesList(movieType.upcoming, {
@@ -28,48 +69,29 @@ const MovieGrid = (props) => {
         }
       } else {
         const params = {
+          page: page + 1,
           query: keyword,
         };
         response = await tmdbApi.search(props.category, { params });
       }
-      setItems(response.results);
-      setTotalPage(response.total_pages);
-    };
-    getList();
-  }, [keyword, props.category]);
-
-  const loadMore = async () => {
-    let response = null;
-    if (keyword === undefined) {
-      const params = {
-        page: page + 1,
-      };
-      switch (props.category) {
-        case category.movie:
-          response = await tmdbApi.getMoviesList(movieType.upcoming, {
-            params,
-          });
-          break;
-        default:
-          response = await tmdbApi.getTvList(tvType.popular, { params });
+      
+      if (response && response.results) {
+        setItems([...items, ...response.results]);
+        setPage(page + 1);
+      } else {
+        console.error('Load more API response is invalid:', response);
       }
-    } else {
-      const params = {
-        page: page + 1,
-        query: keyword,
-      };
-      response = await tmdbApi.search(props.category, { params });
+    } catch (error) {
+      console.error('Error loading more data:', error);
     }
-    setItems([...items, ...response.results]);
-    setPage(page + 1);
   };
 
   return (
     <>
-      <div className="section mb-12">
+      <div className="mb-12">
         <MovieSearch category={props.category} keyword={keyword} />
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5 mb-8 lg:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-5 mb-8 lg:grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
         {items.map((item, index) => (
           <MovieCard key={index} category={props.category} item={item} />
         ))}
@@ -88,16 +110,16 @@ const MovieGrid = (props) => {
 };
 
 const MovieSearch = (props) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [keyword, setKeyword] = useState(props.keyword ? props.keyword : "");
 
   const goToSearch = useCallback(() => {
     if (keyword.trim().length > 0) {
-      history.push(
+      navigate(
         `/${Config.HOME_PAGE}/${category[props.category]}/search/${keyword}`
       );
     }
-  }, [keyword, props.category, history]);
+  }, [keyword, props.category, navigate]);
 
   useEffect(() => {
     const enterEvent = (e) => {

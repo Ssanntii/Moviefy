@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import tmdbApi from "./../../api/tmdbApi";
+import tmdbApi from "../../api/tmdbApi";
 import apiConfig from "../../api/apiConfig";
 import CastList from "./CastList";
 import VideoList from "./VideoList";
-import MovieList from "./../../components/movie-list/MovieList";
+import MovieList from "../../components/MovieList";
 
 const Detail = () => {
   const { category, id } = useParams();
@@ -98,7 +98,6 @@ const Detail = () => {
   );
 };
 
-// Cast List and Video List would need these styles if they're separate components
 export const CastListStyles = {
   casts: "grid grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-2.5",
   castsItem: "",

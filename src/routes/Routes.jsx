@@ -1,5 +1,4 @@
-import React from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 
 import Home from "../pages/Home"
 import Catalog from "../pages/Catalog"
@@ -7,18 +6,31 @@ import Detail from "../pages/detail/Detail"
 
 import * as Config from "../constants/Config"
 
-const Routes = () => {
+const AppRoutes = () => {
     return (
-        <Switch>
+        <Routes>
             <Route
                 path={`/${Config.HOME_PAGE}/:category/search/:keyword`}
-                component={Catalog}
+                element={<Catalog />}
             />
-            <Route path={`/${Config.HOME_PAGE}/:category/:id`} component={Detail} />
-            <Route path={`/${Config.HOME_PAGE}/:category`}component={Catalog} />
-            <Route path={`/${Config.HOME_PAGE}`}component={Home} />
-        </Switch>
+            <Route 
+                path={`/${Config.HOME_PAGE}/:category/:id`} 
+                element={<Detail />} 
+            />
+            <Route 
+                path={`/${Config.HOME_PAGE}/:category`} 
+                element={<Catalog />} 
+            />
+            <Route 
+                path={`/${Config.HOME_PAGE}`} 
+                element={<Home />} 
+            />
+            <Route 
+                path="/" 
+                element={<Home />} 
+            />
+        </Routes>
     )
 }
 
-export default Routes
+export default AppRoutes
