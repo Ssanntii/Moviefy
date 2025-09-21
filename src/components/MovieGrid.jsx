@@ -99,12 +99,10 @@ const MovieGrid = (props) => {
       {page < totalPage ? (
         <div className="text-center">
           <OutlineButton className="small" onClick={loadMore}>
-            Load more
+            Cargar más...
           </OutlineButton>
         </div>
-      ) : (
-        ""
-      )}
+      ) : null}
     </>
   );
 };
@@ -123,8 +121,8 @@ const MovieSearch = (props) => {
 
   useEffect(() => {
     const enterEvent = (e) => {
-      e.preventDefault();
       if (e.keyCode === 13) {
+        e.preventDefault();
         goToSearch();
       }
     };
@@ -134,20 +132,27 @@ const MovieSearch = (props) => {
     };
   }, [goToSearch]);
 
+  const getPlaceholder = () => {
+    if (props.category === category.movie) {
+      return "Buscar películas...";
+    } else if (props.category === category.tv) {
+      return "Buscar series...";
+    } else {
+      return "Buscar...";
+    }
+  };
+
   return (
-    <div className="relative w-full max-w-lg">
+    <div className="flex items-center gap-3 w-full max-w-xl mx-auto">
       <Input
         type="text"
-        placeholder="Buscar..."
+        placeholder={getPlaceholder()}
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        className="w-full pr-32"
       />
-      <div className="absolute right-0 top-0.5 md:right-px md:top-px">
-        <Button small onClick={goToSearch}>
-          Buscar
-        </Button>
-      </div>
+      <Button small onClick={goToSearch}>
+        Buscar
+      </Button>
     </div>
   );
 };

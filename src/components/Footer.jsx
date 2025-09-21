@@ -16,12 +16,9 @@ const Footer = () => {
         <div className="flex justify-center items-center mb-12">
           <div className="logo flex items-center space-x-2">
             <img src={logo} alt="logo" className="h-8 w-auto" />
-            <Link 
-              to={`/${Config.HOME_PAGE}`}
-              className="text-white text-xl font-bold hover:opacity-80 transition-opacity"
-            >
+            <div className="text-white text-xl font-bold">
               Moviefy
-            </Link>
+            </div>
           </div>
         </div>
 

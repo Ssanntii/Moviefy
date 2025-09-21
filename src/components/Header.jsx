@@ -42,28 +42,28 @@ const Header = () => {
         isScrolled ? 'h-16 bg-gray-900' : 'h-20'
       }`}
     >
-      <div className="flex items-center justify-between h-full px-8 container max-w-7xl mx-auto md:justify-center">
-        {/* Logo */}
-        <div className="text-4xl font-semibold flex items-center">
+      <div className="flex items-center justify-between h-full px-8 max-w-7xl mx-auto">
+        {/* Logo - Siempre a la izquierda */}
+        <div className="flex items-center">
           <img 
             src={logo} 
             alt="logo" 
-            className="mr-2.5 w-12 md:w-8 md:mr-0"
+            className="mr-2.5 w-12 h-12"
           />
           <Link 
             to={`/${Config.HOME_PAGE}`}
-            className="text-white hover:opacity-80 transition-opacity"
+            className="text-white text-3xl font-semibold hover:opacity-80 transition-opacity"
           >
             Moviefy
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Siempre a la derecha */}
         <ul className="hidden md:flex items-center space-x-8">
           {headerNav.map((e, i) => (
             <li 
               key={i} 
-              className="py-1.5 font-bold relative text-2xl group"
+              className="py-1.5 font-bold relative text-xl group"
             >
               <Link 
                 to={e.path}
@@ -72,7 +72,7 @@ const Header = () => {
                 {e.display}
               </Link>
               {/* Underline effect */}
-              <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-red-500 transition-all duration-500 ease-in-out ${
+              <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-teal-400 transition-all duration-500 ease-in-out ${
                 i === active ? 'w-full' : 'w-0 group-hover:w-full'
               }`}></span>
             </li>
@@ -95,7 +95,7 @@ const Header = () => {
                 {e.display}
               </Link>
               {/* Underline effect */}
-              <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-red-500 transition-all duration-500 ease-in-out ${
+              <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 bg-teal-400 transition-all duration-500 ease-in-out ${
                 i === active ? 'w-3/4' : 'w-0 group-hover:w-3/4'
               }`}></span>
             </li>

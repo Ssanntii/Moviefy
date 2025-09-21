@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useParams } from 'react-router-dom'
 import MovieGrid from '../components/MovieGrid'
 
@@ -16,8 +14,8 @@ const Catalog = () => {
                 {category === cate.movie ? "Movies" : "TV Series"}
             </PageHeader>
 
-            <div className='container'>
-                <div className='section mb-3'>
+            <div className='max-w-7xl mx-auto px-8'>
+                <div className='mb-12'>
                     <MovieGrid category = {category} />
                 </div>
             </div>

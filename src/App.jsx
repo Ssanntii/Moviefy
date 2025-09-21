@@ -1,18 +1,19 @@
 import { BrowserRouter } from 'react-router-dom'
 
-import Header from '../src/components/Header'
-import Footer from '../src/components/Footer'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
-import AppRoutes from '../src/routes/Routes'
+import AppRoutes from './routes/Routes'
 
 function App() {
-
   return (
-    <BrowserRouter>
-      <Header />
-      <AppRoutes />
-      <Footer />
-    </BrowserRouter>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-teal-800 to-cyan-700">
+      <BrowserRouter>
+        <Header />
+        <AppRoutes />
+        <Footer />
+      </BrowserRouter>
+    </div>
   )
 }
 
