@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { useParams } from 'react-router-dom'
 import MovieGrid from '../components/MovieGrid'
 
@@ -7,8 +9,6 @@ import { category as cate } from '../api/tmdbApi'
 
 const Catalog = () => {
     const { category } = useParams()
-
-    console.log(category)
 
     return (
         <>
