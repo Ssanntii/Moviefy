@@ -1,36 +1,35 @@
-import axios from "axios";
-import queryString from "query-string";
-import apiConfig from "./apiConfig";
+import axios from "axios"
+import queryString from "query-string"
+import apiConfig from "./apiConfig"
 
-let currentLanguage = "en-US"; // idioma por defecto
+let currentLanguage = "en-US"
 
-// 👉 función para actualizar el idioma dinámicamente desde React
 export const setLanguageForApi = (lang) => {
   currentLanguage = lang;
-};
+}
 
 const axiosClient = axios.create({
   baseURL: apiConfig.baseURL,
   headers: {
     "Content-Type": "application/json",
-    authorization: `Bearer ${apiConfig.apiKey}`,
+    authorization: `Bearer ${apiConfig.apiKey}`
   },
   paramsSerializer: (params) =>
     queryString.stringify({
       ...params,
       api_key: apiConfig.apiKey,
-      language: currentLanguage, // 👈 siempre inyecta el idioma actual
-    }),
-});
+      language: currentLanguage
+    })
+})
 
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) return response.data;
-    return response;
+    return response
   },
   (error) => {
-    throw error;
+    throw error
   }
-);
+)
 
-export default axiosClient;
+export default axiosClient

@@ -4,7 +4,7 @@ import { setLanguageForApi } from "../api/axiosClient";
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState("en-US");
+  const [language, setLanguage] = useState("es-MX");
 
   // cuando cambia el idioma en el contexto, se actualiza axiosClient
   useEffect(() => {

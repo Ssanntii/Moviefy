@@ -13,7 +13,6 @@ const MovieGrid = (props) => {
   const [totalPage, setTotalPage] = useState(0);
   const { keyword } = useParams();
   const { language } = useLanguage();
-  const navigate = useNavigate();
 
   const fetchData = async (pageNum = 1) => {
     const params = { page: pageNum, language };

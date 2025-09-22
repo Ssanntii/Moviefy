@@ -12,29 +12,30 @@ import { useLanguage } from "../context/LanguageContext";
 const HeroSlide = () => {
   const [movieItems, setMovieItems] = useState([]);
   const [modalState, setModalState] = useState({});
-  const { language } = useLanguage(); // <-- Tomamos el idioma
-  const navigate = useNavigate();
+  const { language } = useLanguage();
 
   useEffect(() => {
     const getMovies = async () => {
-      const params = { page: 1, language }; // <-- enviamos el idioma a la API
       try {
+        const params = { page: 1, language };
         const response = await tmdbApi.getMoviesList(movieType.popular, { params });
         setMovieItems(response.results.slice(0, 4));
       } catch (error) {
-        console.log("Error fetching movies:", error);
+        console.error("Error fetching movies:", error);
       }
     };
     getMovies();
-  }, [language]); // <-- el efecto se dispara al cambiar idioma
+  }, [language]);
 
-  const openModal = (itemId) => {
-    setModalState({ ...modalState, [itemId]: true });
-  };
+  const openModal = (itemId) => setModalState({ ...modalState, [itemId]: true });
+  const closeModal = (itemId) => setModalState({ ...modalState, [itemId]: false });
 
-  const closeModal = (itemId) => {
-    setModalState({ ...modalState, [itemId]: false });
-  };
+  if (!movieItems.length)
+    return (
+      <div className="py-36 w-full bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
 
   return (
     <div className="mb-12">
@@ -45,15 +46,13 @@ const HeroSlide = () => {
         slidesPerView={1}
         autoplay={{ delay: 4000 }}
       >
-        {movieItems.map((item, index) => (
-          <SwiperSlide key={index}>
-            <HeroSlideItem
-              item={item}
-              onOpenModal={() => openModal(item.id)}
-            />
+        {movieItems.map((item) => (
+          <SwiperSlide key={item.id}>
+            <HeroSlideItem item={item} onOpenModal={() => openModal(item.id)} />
           </SwiperSlide>
         ))}
       </Swiper>
+
       {movieItems.map((item) => (
         <TrailerModal
           key={item.id}
@@ -68,42 +67,43 @@ const HeroSlide = () => {
 
 const HeroSlideItem = ({ item, onOpenModal }) => {
   const navigate = useNavigate();
-  const background = apiConfig.originalImage(
-    item.backdrop_path ? item.backdrop_path : item.poster_path
-  );
-
-  const setModalActive = async () => {
-    const modal = document.querySelector(`#modal_${item.id}`);
-    const videos = await tmdbApi.getVideos(category.movie, item.id);
-    if (videos.results.length > 0) {
-      const videoSrc = "https://www.youtube.com/embed/" + videos.results[0].key;
-      modal
-        .querySelector(".modal__content > iframe")
-        .setAttribute("src", videoSrc);
-    } else {
-      modal.querySelector(".modal__content").innerHTML = "No trailer";
-    }
-    modal.classList.toggle("active");
-  };
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const background = apiConfig.originalImage(item.backdrop_path || item.poster_path);
 
   return (
-    <div
-      className={`py-36 w-full relative bg-center bg-cover bg-no-repeat before:content-[''] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-black before:bg-opacity-50 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[100px] after:bg-gradient-to-t after:from-gray-900 after:to-transparent`}
-      style={{ backgroundImage: `url(${background})` }}
-    >
-      <div className="flex items-center justify-center relative max-w-7xl mx-auto px-4">
-        <div className="w-[55%] px-12 relative space-y-12 lg:w-full">
-          <h2 className="text-8xl font-bold leading-none lg:text-6xl">
-            {item.title}
+    <div className="relative w-full h-[600px] lg:h-[700px] overflow-hidden">
+      {/* Imagen de fondo */}
+      {background && (
+        <img
+          src={background}
+          alt={item.title || item.name}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoad={() => setImageLoaded(true)}
+        />
+      )}
+
+      {/* Overlay oscuro */}
+      <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
+
+      {/* Gradiente inferior */}
+      <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-gray-900 to-transparent z-20"></div>
+
+      {/* Contenido textual */}
+      <div className="relative z-30 flex items-center justify-center h-full px-4 max-w-7xl mx-auto">
+        <div className="w-[55%] px-12 lg:w-full space-y-8">
+          <h2 className="text-6xl font-bold leading-tight text-white lg:text-4xl">
+            {item.title || item.name}
           </h2>
-          <div className="font-bold tracking-wide">{item.overview}</div>
-          <div className="flex space-x-4">
+          <div className="text-white font-medium tracking-wide text-lg leading-relaxed max-w-2xl">
+            {item.overview}
+          </div>
+          <div className="flex space-x-4 pt-4">
             <Button onClick={() => navigate(`/${Config.HOME_PAGE}/movie/${item.id}`)}>
               Watch now
             </Button>
-            <OutlineButton onClick={setModalActive}>
-              Watch trailer
-            </OutlineButton>
+            <OutlineButton onClick={onOpenModal}>Watch trailer</OutlineButton>
           </div>
         </div>
       </div>
@@ -113,27 +113,28 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
 
 const TrailerModal = ({ item, isActive, onClose }) => {
   const [videoSrc, setVideoSrc] = useState("");
-  const { language } = useLanguage(); // <-- agregamos idioma si quieres filtrar trailers subtitulados (opcional)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isActive) {
       const loadVideo = async () => {
+        setLoading(true);
         try {
           const videos = await tmdbApi.getVideos(category.movie, item.id);
-          if (videos.results && videos.results.length > 0) {
-            setVideoSrc(`https://www.youtube.com/embed/${videos.results[0].key}`);
-          } else {
-            setVideoSrc("");
-          }
+          setVideoSrc(videos.results?.[0]?.key ? `https://www.youtube.com/embed/${videos.results[0].key}` : "");
         } catch (err) {
+          console.error("Error loading video:", err);
           setVideoSrc("");
+        } finally {
+          setLoading(false);
         }
       };
       loadVideo();
     } else {
       setVideoSrc("");
+      setLoading(false);
     }
-  }, [isActive, item.id, language]); // <-- dependemos del idioma también si hace falta
+  }, [isActive, item.id]);
 
   const handleClose = () => {
     setVideoSrc("");
@@ -143,7 +144,11 @@ const TrailerModal = ({ item, isActive, onClose }) => {
   return (
     <Modal active={isActive} id={`modal_${item.id}`} onClose={handleClose}>
       <ModalContent>
-        {videoSrc ? (
+        {loading ? (
+          <div className="text-white text-xl flex items-center justify-center h-[500px]">
+            Loading trailer...
+          </div>
+        ) : videoSrc ? (
           <iframe
             src={videoSrc}
             width="100%"
@@ -153,7 +158,9 @@ const TrailerModal = ({ item, isActive, onClose }) => {
             allowFullScreen
           />
         ) : (
-          <div className="text-white text-xl">No trailer available</div>
+          <div className="text-white text-xl flex items-center justify-center h-[500px]">
+            No trailer available
+          </div>
         )}
       </ModalContent>
     </Modal>

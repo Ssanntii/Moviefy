@@ -112,7 +112,7 @@ const Header = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => { setLanguage('es-MX'); setShowLangDropdown(false); }}
+                    onClick={() => { setLanguage('es-ES'); setShowLangDropdown(false); }}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-800 rounded-b-lg transition-colors text-white font-semibold"
                   >
                     ES
