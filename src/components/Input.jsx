@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"
 
 const Input = (props) => {
   return (
@@ -31,8 +31,8 @@ const Input = (props) => {
       `}
       {...props}
     />
-  );
-};
+  )
+}
 
 Input.propTypes = {
   type: PropTypes.string,
@@ -40,6 +40,6 @@ Input.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   className: PropTypes.string,
-};
+}
 
-export default Input;
+export default Input

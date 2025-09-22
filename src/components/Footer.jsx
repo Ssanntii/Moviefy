@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom";
-import bg from "../assets/footer-bg.jpg";
-import logo from "../assets/logo.png";
-import * as Config from "../constants/Config";
-import { useLanguage } from "../context/LanguageContext";
+import { Link } from "react-router-dom"
+import bg from "../assets/footer-bg.jpg"
+import logo from "../assets/logo.png"
+import * as Config from "../constants/Config"
+import { useLanguage } from "../context/LanguageContext"
 
 const Footer = () => {
-  const { language } = useLanguage();
+  const { language } = useLanguage()
 
-  // Normalizamos la clave para translations
-  const langKey = language.startsWith("es") ? "es" : "en";
+  const langKey = language.startsWith("es") ? "es" : "en"
 
   const translations = {
     en: {
@@ -21,7 +20,7 @@ const Footer = () => {
       movies: "Películas",
       tv: "Series",
     },
-  };
+  }
 
   return (
     <div
@@ -29,7 +28,6 @@ const Footer = () => {
       style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="max-w-4xl mx-auto">
-        {/* Logo Section */}
         <div className="flex justify-center items-center mb-12">
           <div className="logo flex items-center space-x-2">
             <img src={logo} alt="logo" className="h-8 w-auto" />
@@ -37,7 +35,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Menu Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col items-start mt-4 text-2xl font-semibold space-y-4">
             <Link
@@ -62,7 +59,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

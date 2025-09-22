@@ -1,51 +1,51 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { SwiperSlide, Swiper } from "swiper/react";
-import MovieCard from "./MovieCard";
-import tmdbApi, { category } from "../api/tmdbApi";
-import { useLanguage } from "../context/LanguageContext";
+import { useEffect, useState } from "react"
+import PropTypes from "prop-types"
+import { SwiperSlide, Swiper } from "swiper/react"
+import MovieCard from "./MovieCard"
+import tmdbApi, { category } from "../api/tmdbApi"
+import { useLanguage } from "../context/LanguageContext"
 
 const MovieList = (props) => {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const { language } = useLanguage();
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const { language } = useLanguage()
 
   useEffect(() => {
     const getList = async () => {
       try {
-        setLoading(true);
-        setError(false);
-        let response = null;
-        const params = { language };
+        setLoading(true)
+        setError(false)
+        let response = null
+        const params = { language }
 
         if (props.type !== "similar") {
           switch (props.category) {
             case category.movie:
-              response = await tmdbApi.getMoviesList(props.type, { params });
-              break;
+              response = await tmdbApi.getMoviesList(props.type, { params })
+              break
             default:
-              response = await tmdbApi.getTvList(props.type, { params });
+              response = await tmdbApi.getTvList(props.type, { params })
           }
         } else {
-          response = await tmdbApi.similar(props.category, props.id);
+          response = await tmdbApi.similar(props.category, props.id)
         }
 
         if (response && response.results) {
-          setItems(response.results);
+          setItems(response.results)
         } else {
-          console.error('MovieList API response is invalid:', response);
-          setItems([]);
+          console.error('MovieList API response is invalid:', response)
+          setItems([])
         }
       } catch (error) {
-        console.error('Error fetching movie list:', error);
-        setError(true);
-        setItems([]);
+        console.error('Error fetching movie list:', error)
+        setError(true)
+        setItems([])
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     };
-    getList();
+    getList()
   }, [props.category, props.id, props.type, language])
 
   if (loading) {
@@ -55,7 +55,7 @@ const MovieList = (props) => {
           {language === "en" ? "Loading movies..." : "Cargando películas..."}
         </div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -65,7 +65,7 @@ const MovieList = (props) => {
           {language === "en" ? "Error loading movies" : "Error al cargar películas"}
         </div>
       </div>
-    );
+    )
   }
 
   if (items.length === 0) {
@@ -75,7 +75,7 @@ const MovieList = (props) => {
           {language === "en" ? "No movies found" : "No se encontraron películas"}
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -99,13 +99,13 @@ const MovieList = (props) => {
         ))}
       </Swiper>
     </div>
-  );
-};
+  )
+}
 
 MovieList.propTypes = {
   category: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   id: PropTypes.string,
-};
+}
 
-export default MovieList;
+export default MovieList

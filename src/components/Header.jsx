@@ -1,19 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/logo.png";
-import * as Config from "../constants/Config";
-import { useLanguage } from "../context/LanguageContext";
+import { useEffect, useRef, useState } from "react"
+import { Link, useLocation } from "react-router-dom"
+import logo from "../assets/logo.png"
+import * as Config from "../constants/Config"
+import { useLanguage } from "../context/LanguageContext"
 
 const Header = () => {
-  const { pathname } = useLocation();
-  const headerRef = useRef(null);
+  const { pathname } = useLocation()
+  const headerRef = useRef(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLangDropdown, setShowLangDropdown] = useState(false)
 
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage()
 
 
-  const langKey = language.startsWith("es") ? "es" : "en";
+  const langKey = language.startsWith("es") ? "es" : "en"
 
   const translations = {
     en: {
@@ -26,7 +26,7 @@ const Header = () => {
       movies: "Películas",
       tv: "Series",
     },
-  };
+  }
 
   const headerNav = [
     {
@@ -40,22 +40,22 @@ const Header = () => {
     {
       display: translations[langKey].tv,
       path: `/${Config.HOME_PAGE}/tv`,
-    },
-  ];
+    }
+  ]
 
-  const active = headerNav.findIndex((e) => e.path === pathname);
+  const active = headerNav.findIndex((e) => e.path === pathname)
 
   useEffect(() => {
     const shrinkHeader = () => {
       const scrollTop =
-        document.body.scrollTop || document.documentElement.scrollTop;
-      setIsScrolled(scrollTop > 100);
-    };
-    window.addEventListener("scroll", shrinkHeader);
+        document.body.scrollTop || document.documentElement.scrollTop
+      setIsScrolled(scrollTop > 100)
+    }
+    window.addEventListener("scroll", shrinkHeader)
     return () => {
-      window.removeEventListener("scroll", shrinkHeader);
-    };
-  }, []);
+      window.removeEventListener("scroll", shrinkHeader)
+    }
+  }, [])
 
   return (
     <div
@@ -65,7 +65,6 @@ const Header = () => {
       }`}
     >
       <div className="flex items-center justify-between h-full px-8 max-w-7xl mx-auto">
-        {/* Logo */}
         <div className="flex items-center">
           <img src={logo} alt="logo" className="mr-2.5 w-12 h-12" />
           <Link
@@ -76,7 +75,6 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <ul className="hidden md:flex items-center space-x-6">
           {headerNav.map((e, i) => (
             <li key={i} className="py-1.5 font-bold relative text-xl group">
@@ -92,7 +90,6 @@ const Header = () => {
             </li>
           ))}
 
-          {/* Language Dropdown */}
           <li className="relative">
             <button
               onClick={() => setShowLangDropdown(!showLangDropdown)}
@@ -104,7 +101,7 @@ const Header = () => {
               <ul className="absolute right-0 mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-50 min-w-[60px]">
                 <li>
                   <button
-                    onClick={() => { setLanguage('en-US'); setShowLangDropdown(false); }}
+                    onClick={() => { setLanguage('en-US'); setShowLangDropdown(false) }}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-800 rounded-t-lg transition-colors text-white font-semibold"
                   >
                     EN
@@ -112,7 +109,7 @@ const Header = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => { setLanguage('es-ES'); setShowLangDropdown(false); }}
+                    onClick={() => { setLanguage('es-ES'); setShowLangDropdown(false) }}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-800 rounded-b-lg transition-colors text-white font-semibold"
                   >
                     ES
@@ -124,7 +121,6 @@ const Header = () => {
         </ul>
       </div>
 
-      {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 w-full h-20 bg-gray-900 px-8 shadow-lg">
         <ul className="flex items-center justify-between h-full">
           {headerNav.map((e, i) => (
@@ -146,7 +142,7 @@ const Header = () => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

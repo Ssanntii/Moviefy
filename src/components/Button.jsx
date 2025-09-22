@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"
 
 const Button = ({ children, className = "", onClick, small = false, ...props }) => {
   const baseClasses = `
@@ -12,14 +12,14 @@ const Button = ({ children, className = "", onClick, small = false, ...props }) 
     transition-shadow duration-300 ease-in-out
     relative
     focus:outline-none focus:ring-2 focus:ring-teal-300 focus:ring-opacity-50
-  `;
+  `
   
   const smallClasses = `
     border-2 
     px-6 py-1 text-base
-  `;
+  `
 
-  const finalClasses = `${baseClasses} ${small ? smallClasses : ''} ${className}`.trim();
+  const finalClasses = `${baseClasses} ${small ? smallClasses : ''} ${className}`.trim()
 
   return (
     <button
@@ -29,8 +29,8 @@ const Button = ({ children, className = "", onClick, small = false, ...props }) 
     >
       {children}
     </button>
-  );
-};
+  )
+}
 
 export const OutlineButton = ({ children, className = "", onClick, small = false, ...props }) => {
   const baseClasses = `
@@ -43,14 +43,14 @@ export const OutlineButton = ({ children, className = "", onClick, small = false
     transition-colors duration-300 ease-in-out
     relative
     focus:outline-none focus:ring-2 focus:ring-teal-300 focus:ring-opacity-50
-  `;
+  `
   
   const smallClasses = `
     border-2 
     px-6 py-1 text-base
-  `;
+  `
 
-  const finalClasses = `${baseClasses} ${small ? smallClasses : ''} ${className}`.trim();
+  const finalClasses = `${baseClasses} ${small ? smallClasses : ''} ${className}`.trim()
 
   return (
     <button
@@ -60,21 +60,21 @@ export const OutlineButton = ({ children, className = "", onClick, small = false
     >
       {children}
     </button>
-  );
-};
+  )
+}
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,
   small: PropTypes.bool,
-};
+}
 
 OutlineButton.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,
   small: PropTypes.bool,
-};
+}
 
-export default Button;
+export default Button

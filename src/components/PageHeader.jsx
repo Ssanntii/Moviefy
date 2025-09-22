@@ -1,4 +1,4 @@
-import bg from "../assets/footer-bg.jpg";
+import bg from "../assets/footer-bg.jpg"
 
 const PageHeader = (props) => {
   return (
@@ -10,7 +10,7 @@ const PageHeader = (props) => {
         {props.children}
       </h2>
     </div>
-  );
-};
+  )
+}
 
-export default PageHeader;
+export default PageHeader

@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
-import { Play } from "lucide-react";
-import Button from "./Button";
-import { category } from "../api/tmdbApi";
-import apiConfig from "../api/apiConfig";
-import * as Config from "../constants/Config";
+import { Link } from "react-router-dom"
+import { Play } from "lucide-react"
+import Button from "./Button"
+import { category } from "../api/tmdbApi"
+import apiConfig from "../api/apiConfig"
+import * as Config from "../constants/Config"
 
 const MovieCard = (props) => {
-  const item = props.item;
-  const link = `/${Config.HOME_PAGE}/${category[props.category]}/${item.id}`;
-  const bg = apiConfig.w500Image(item.poster_path || item.backdrop_path);
+  const item = props.item
+  const link = `/${Config.HOME_PAGE}/${category[props.category]}/${item.id}`
+  const bg = apiConfig.w500Image(item.poster_path || item.backdrop_path)
 
   return (
     <Link to={link}>
@@ -24,7 +24,7 @@ const MovieCard = (props) => {
       </div>
       <h3 className="text-white font-semibold truncate">{item.title || item.name}</h3>
     </Link>
-  );
-};
+  )
+}
 
-export default MovieCard;
+export default MovieCard

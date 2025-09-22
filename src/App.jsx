@@ -1,9 +1,9 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom"
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import AppRoutes from "./routes/Routes";
-import { LanguageProvider } from "./context/LanguageContext";
+import Header from "./components/Header"
+import Footer from "./components/Footer"
+import AppRoutes from "./routes/Routes"
+import { LanguageProvider } from "./context/LanguageContext"
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         </LanguageProvider>
       </BrowserRouter>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
