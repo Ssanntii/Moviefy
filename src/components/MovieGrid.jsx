@@ -5,86 +5,48 @@ import tmdbApi, { category, movieType, tvType } from "../api/tmdbApi";
 import Button, { OutlineButton } from "./Button";
 import Input from "./Input";
 import * as Config from "../constants/Config";
+import { useLanguage } from "../context/LanguageContext";
 
 const MovieGrid = (props) => {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const { keyword } = useParams();
+  const { language } = useLanguage();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const getList = async () => {
-      try {
-        let response = null;
-        if (keyword === undefined) {
-          const params = {};
-          switch (props.category) {
-            case category.movie:
-              response = await tmdbApi.getMoviesList(movieType.upcoming, {
-                params,
-              });
-              break;
-            default:
-              response = await tmdbApi.getTvList(tvType.popular, { params });
-          }
-        } else {
-          const params = {
-            query: keyword,
-          };
-          response = await tmdbApi.search(props.category, { params });
-        }
-        
-        if (response && response.results) {
-          setItems(response.results);
-          setTotalPage(response.total_pages || 0);
-        } else {
-          console.error('API response is invalid:', response);
-          setItems([]);
-          setTotalPage(0);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setItems([]);
-        setTotalPage(0);
-      }
-    };
-    getList();
-  }, [keyword, props.category]);
+  const fetchData = async (pageNum = 1) => {
+    const params = { page: pageNum, language };
+    let response = null;
 
-  const loadMore = async () => {
     try {
-      let response = null;
-      if (keyword === undefined) {
-        const params = {
-          page: page + 1,
-        };
-        switch (props.category) {
-          case category.movie:
-            response = await tmdbApi.getMoviesList(movieType.upcoming, {
-              params,
-            });
-            break;
-          default:
-            response = await tmdbApi.getTvList(tvType.popular, { params });
+      if (!keyword) {
+        if (props.category === category.movie) {
+          response = await tmdbApi.getMoviesList(movieType.upcoming, { params });
+        } else {
+          response = await tmdbApi.getTvList(tvType.popular, { params });
         }
       } else {
-        const params = {
-          page: page + 1,
-          query: keyword,
-        };
-        response = await tmdbApi.search(props.category, { params });
+        response = await tmdbApi.search(props.category, { params: { ...params, query: keyword } });
       }
-      
+
       if (response && response.results) {
-        setItems([...items, ...response.results]);
-        setPage(page + 1);
-      } else {
-        console.error('Load more API response is invalid:', response);
+        if (pageNum === 1) setItems(response.results);
+        else setItems((prev) => [...prev, ...response.results]);
+        setTotalPage(response.total_pages || 0);
+        setPage(pageNum);
       }
     } catch (error) {
-      console.error('Error loading more data:', error);
+      console.error("Error fetching data:", error);
+      if (pageNum === 1) setItems([]);
     }
   };
+
+  useEffect(() => {
+    fetchData(1);
+  }, [keyword, props.category, language]);
+
+  const loadMore = () => fetchData(page + 1);
 
   return (
     <>
@@ -96,20 +58,26 @@ const MovieGrid = (props) => {
           <MovieCard key={index} category={props.category} item={item} />
         ))}
       </div>
-      {page < totalPage ? (
+      {page < totalPage && (
         <div className="text-center">
           <OutlineButton className="small" onClick={loadMore}>
-            Cargar más...
+            {language === "en" ? "Load more..." : "Cargar más..."}
           </OutlineButton>
         </div>
-      ) : null}
+      )}
     </>
   );
 };
 
 const MovieSearch = (props) => {
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState(props.keyword ? props.keyword : "");
+  const { language } = useLanguage();
+  
+  const [keyword, setKeyword] = useState(props.keyword || "");
+
+  useEffect(() => {
+    setKeyword(props.keyword || "");
+  }, [props.keyword, language])
 
   const goToSearch = useCallback(() => {
     if (keyword.trim().length > 0) {
@@ -133,13 +101,9 @@ const MovieSearch = (props) => {
   }, [goToSearch]);
 
   const getPlaceholder = () => {
-    if (props.category === category.movie) {
-      return "Buscar películas...";
-    } else if (props.category === category.tv) {
-      return "Buscar series...";
-    } else {
-      return "Buscar...";
-    }
+    if (props.category === category.movie) return language === "en" ? "Search movies..." : "Buscar películas...";
+    if (props.category === category.tv) return language === "en" ? "Search TV series..." : "Buscar series...";
+    return language === "en" ? "Search..." : "Buscar...";
   };
 
   return (
@@ -151,7 +115,7 @@ const MovieSearch = (props) => {
         onChange={(e) => setKeyword(e.target.value)}
       />
       <Button small onClick={goToSearch}>
-        Buscar
+        {language === "en" ? "Search" : "Buscar"}
       </Button>
     </div>
   );

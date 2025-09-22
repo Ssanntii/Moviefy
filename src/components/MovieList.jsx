@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 import { SwiperSlide, Swiper } from "swiper/react";
 import MovieCard from "./MovieCard";
 import tmdbApi, { category } from "../api/tmdbApi";
+import { useLanguage } from "../context/LanguageContext";
 
 const MovieList = (props) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const getList = async () => {
@@ -15,8 +17,8 @@ const MovieList = (props) => {
         setLoading(true);
         setError(false);
         let response = null;
-        const params = {};
-        
+        const params = { language };
+
         if (props.type !== "similar") {
           switch (props.category) {
             case category.movie:
@@ -28,7 +30,7 @@ const MovieList = (props) => {
         } else {
           response = await tmdbApi.similar(props.category, props.id);
         }
-        
+
         if (response && response.results) {
           setItems(response.results);
         } else {
@@ -44,12 +46,14 @@ const MovieList = (props) => {
       }
     };
     getList();
-  }, [props.category, props.id, props.type]);
+  }, [props.category, props.id, props.type, language])
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-white text-lg">Loading movies...</div>
+        <div className="text-white text-lg">
+          {language === "en" ? "Loading movies..." : "Cargando películas..."}
+        </div>
       </div>
     );
   }
@@ -57,7 +61,9 @@ const MovieList = (props) => {
   if (error) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-red-500 text-lg">Error loading movies</div>
+        <div className="text-red-500 text-lg">
+          {language === "en" ? "Error loading movies" : "Error al cargar películas"}
+        </div>
       </div>
     );
   }
@@ -65,7 +71,9 @@ const MovieList = (props) => {
   if (items.length === 0) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-gray-500 text-lg">No movies found</div>
+        <div className="text-gray-500 text-lg">
+          {language === "en" ? "No movies found" : "No se encontraron películas"}
+        </div>
       </div>
     );
   }
@@ -77,26 +85,11 @@ const MovieList = (props) => {
         spaceBetween={10}
         slidesPerView="auto"
         breakpoints={{
-          320: {
-            slidesPerView: 2,
-            spaceBetween: 10,
-          },
-          640: {
-            slidesPerView: 3,
-            spaceBetween: 15,
-          },
-          768: {
-            slidesPerView: 4,
-            spaceBetween: 15,
-          },
-          1024: {
-            slidesPerView: 6,
-            spaceBetween: 20,
-          },
-          1280: {
-            slidesPerView: 7,
-            spaceBetween: 20,
-          },
+          320: { slidesPerView: 2, spaceBetween: 10 },
+          640: { slidesPerView: 3, spaceBetween: 15 },
+          768: { slidesPerView: 4, spaceBetween: 15 },
+          1024: { slidesPerView: 6, spaceBetween: 20 },
+          1280: { slidesPerView: 7, spaceBetween: 20 },
         }}
       >
         {items.map((item, index) => (
