@@ -115,14 +115,18 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
   )
 
   return (
-    <div className="w-full h-[100vh] sm:h-[80vh] md:h-[70vh] lg:h-[65vh] xl:h-[60vh] relative overflow-hidden bg-gray-900">
+    <div className="w-full h-[600px] relative overflow-hidden bg-gray-900">
+      {/* Imagen de fondo - tamaño estandarizado */}
       {background && !imageError && (
         <img
           src={background}
           alt={item.title || item.name}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 z-0 ${
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 z-0 ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
+          style={{
+            objectPosition: 'center 30%' // Esto centra horizontalmente y muestra 30% desde arriba
+          }}
           onLoad={() => {
             console.log("Image loaded successfully:", background)
             setImageLoaded(true)
@@ -133,21 +137,10 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
           }}
         />
       )}
-
-      {(!background || imageError) && (
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-gray-900 flex items-center justify-center z-0">
-          <div className="text-white text-lg opacity-50">
-            {imageError ? t.imageFailedLoad : t.noImageAvailable}
-          </div>
-        </div>
-      )}
-
-      <div className="absolute inset-0 bg-opacity-40 z-10"></div>
-
-      <div className="absolute bottom-0 left-0 w-full h-[100px] bg-gradient-to-t from-gray-900 to-transparent z-20"></div>
       
-      <div className="flex items-center justify-center absolute inset-0 max-w-7xl mx-auto px-4">
-        <div className="w-[55%] px-12 relative space-y-4 md:space-y-6 lg:space-y-8 lg:w-full z-10">
+      {/* resto del código sin cambios en el contenido */}
+      <div className="flex items-center justify-center absolute inset-0 max-w-7xl mx-auto px-4 z-30" style={{paddingTop: '120px'}}>
+        <div className="w-[55%] px-12 relative space-y-4 md:space-y-6 lg:space-y-8 lg:w-full">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-white lg:text-4xl">
             {item.title || item.name}
           </h2>
