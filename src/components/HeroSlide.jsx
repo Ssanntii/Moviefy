@@ -16,15 +16,12 @@ const HeroSlide = () => {
   const { language } = useLanguage()
 
   useEffect(() => {
-    // Limpiar movies al cambiar idioma
     setMovieItems([]);
     
     const getMovies = async () => {
-      // Sincronizar el idioma antes de hacer la llamada
       setLanguageForApi(language);
       
       try {
-        // Pequeño delay para asegurar que axiosClient se actualice
         await new Promise(resolve => setTimeout(resolve, 100));
         
         const response = await tmdbApi.getMoviesList(movieType.popular, { 
@@ -116,7 +113,6 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
 
   return (
     <div className="w-full h-[600px] relative overflow-hidden bg-gray-900">
-      {/* Imagen de fondo - tamaño estandarizado */}
       {background && !imageError && (
         <img
           src={background}
@@ -125,7 +121,7 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
-            objectPosition: 'center 30%' // Esto centra horizontalmente y muestra 30% desde arriba
+            objectPosition: 'center 30%'
           }}
           onLoad={() => {
             console.log("Image loaded successfully:", background)
@@ -138,7 +134,6 @@ const HeroSlideItem = ({ item, onOpenModal }) => {
         />
       )}
       
-      {/* resto del código sin cambios en el contenido */}
       <div className="flex items-center justify-center absolute inset-0 max-w-7xl mx-auto px-4 z-30" style={{paddingTop: '120px'}}>
         <div className="w-[55%] px-12 relative space-y-4 md:space-y-6 lg:space-y-8 lg:w-full">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-white lg:text-4xl">
